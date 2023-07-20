@@ -19,6 +19,17 @@ namespace Tourism.FeatureTests
         {
             _factory = factory;
         }
+        private TourismContext GetDbContext()
+        {
+            var optionsBuilder = new DbContextOptionsBuilder<TourismContext>();
+            optionsBuilder.UseInMemoryDatabase("TestDatabase");
+
+            var context = new TourismContext(optionsBuilder.Options);
+            context.Database.EnsureDeleted();
+            context.Database.EnsureCreated();
+
+            return context;
+        }
 
         [Fact]
         public async void Index_IncludesLinktoNew()
@@ -76,18 +87,6 @@ namespace Tourism.FeatureTests
 
             Assert.Equal(1, context.Cities.Count());
             Assert.Equal("Des Moines", context.Cities.First().Name);
-        }
-
-        private TourismContext GetDbContext()
-        {
-            var optionsBuilder = new DbContextOptionsBuilder<TourismContext>();
-            optionsBuilder.UseInMemoryDatabase("TestDatabase");
-
-            var context = new TourismContext(optionsBuilder.Options);
-            context.Database.EnsureDeleted();
-            context.Database.EnsureCreated();
-
-            return context;
         }
     }
 }

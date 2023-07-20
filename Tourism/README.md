@@ -42,7 +42,7 @@ Edit this file with your answers.
 3. Imagine you are explaining how to create a resource to a co-worker.  How would you describe how the controller action `Create` works?
 
 4. In our State creation functionality - what would happen if a user did not enter an Abbreviation before submitting the form?
-
+An Abbreivation would not be returned and added to the database
 
 ## Rubric
 

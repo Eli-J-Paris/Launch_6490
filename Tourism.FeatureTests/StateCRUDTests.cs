@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
+using System.Net;
 using Tourism.DataAccess;
 using Tourism.Models;
 
@@ -62,5 +63,30 @@ namespace Tourism.FeatureTests
 
             return context;
         }
+
+        [Fact]
+        public async Task New_ReturnsForm()
+        {
+            //Arrange
+            var client = _factory.CreateClient();
+            var context = GetDbContext();
+            State Colorado = new State { Name = "Coolorado", Abbreviation = "CO" };
+            context.States.Add(Colorado);
+            context.SaveChanges();
+
+            //Act
+            var response = await client.GetAsync($"/states/new");
+            var html = await response.Content.ReadAsStringAsync();
+
+            //Assert
+            //Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            response.EnsureSuccessStatusCode();
+            Assert.Contains("label", html);
+            Assert.Contains("input", html);
+            Assert.Contains($"<form method=\"post\"", html);
+
+        }
+            //I'd test for the redirect if i had time and if it would add to db
+
     }
 }
